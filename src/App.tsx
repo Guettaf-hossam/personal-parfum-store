@@ -4,6 +4,7 @@ import { AdminLogin } from './components/admin/AdminLogin';
 import { CategoryFilter } from './components/CategoryFilter';
 import { OrderModal } from './components/OrderModal';
 import { ProductCard } from './components/ProductCard';
+import { ProductDetailModal } from './components/ProductDetailModal';
 import { SiteFooter } from './components/SiteFooter';
 import { SiteHeader } from './components/SiteHeader';
 import { Toast } from './components/Toast';
@@ -20,6 +21,7 @@ function Storefront() {
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [selectedOrderProduct, setSelectedOrderProduct] = useState<Product | null>(null);
+  const [selectedDetailProduct, setSelectedDetailProduct] = useState<Product | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   useEffect(() => {
@@ -31,13 +33,23 @@ function Storefront() {
   }, []);
 
   useEffect(() => {
-    const hash = window.location.hash;
-    if (hash && hash.startsWith('#product-')) {
-      const el = document.querySelector(hash);
-      if (el) {
-        setTimeout(() => el.scrollIntoView({ behavior: 'smooth' }), 300);
+    const handleHash = () => {
+      const hash = window.location.hash;
+      if (hash && hash.startsWith('#product-')) {
+        const prodId = hash.replace('#product-', '');
+        const found = products.find((p) => p.id === prodId);
+        if (found) {
+          setSelectedDetailProduct(found);
+          const el = document.getElementById(`product-${prodId}`);
+          if (el) {
+            setTimeout(() => el.scrollIntoView({ behavior: 'smooth' }), 300);
+          }
+        }
       }
-    }
+    };
+    handleHash();
+    window.addEventListener('hashchange', handleHash);
+    return () => window.removeEventListener('hashchange', handleHash);
   }, [products]);
 
   const showToast = useCallback((msg: string) => {
@@ -118,6 +130,7 @@ function Storefront() {
                   product={product}
                   onOrder={(p) => setSelectedOrderProduct(p)}
                   onShare={handleShare}
+                  onViewDetails={(p) => setSelectedDetailProduct(p)}
                 />
               ))}
             </div>
@@ -126,6 +139,18 @@ function Storefront() {
       </div>
 
       <SiteFooter />
+
+      <ProductDetailModal
+        product={selectedDetailProduct}
+        products={filteredProducts.length > 0 ? filteredProducts : products}
+        onClose={() => setSelectedDetailProduct(null)}
+        onOrder={(p) => {
+          setSelectedDetailProduct(null);
+          setSelectedOrderProduct(p);
+        }}
+        onShare={handleShare}
+        onSelectProduct={(p) => setSelectedDetailProduct(p)}
+      />
 
       <OrderModal
         product={selectedOrderProduct}

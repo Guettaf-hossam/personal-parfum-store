@@ -1,4 +1,4 @@
-import { Share2, Star } from 'lucide-react';
+import { Eye, Share2, Star } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { Product } from '../types';
 import { calculateDiscount, formatPrice } from '../utils/formatting';
@@ -7,9 +7,15 @@ interface ProductCardProps {
   product: Product;
   onOrder: (product: Product) => void;
   onShare: (product: Product) => void;
+  onViewDetails: (product: Product) => void;
 }
 
-export function ProductCard({ product, onOrder, onShare }: ProductCardProps) {
+export function ProductCard({
+  product,
+  onOrder,
+  onShare,
+  onViewDetails,
+}: ProductCardProps) {
   const { language, t } = useLanguage();
 
   const discount = calculateDiscount(product.price, product.old_price);
@@ -17,31 +23,47 @@ export function ProductCard({ product, onOrder, onShare }: ProductCardProps) {
   return (
     <article
       id={`product-${product.id}`}
-      className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#14171c] shadow-lg transition-all duration-300 hover:-translate-y-1 hover:border-[#ffb442]/50 hover:shadow-xl hover:shadow-[#ffb442]/5 dark:bg-[#14171c] dark:border-white/10 not-dark:bg-white not-dark:border-slate-200 not-dark:shadow-sm not-dark:hover:border-slate-300"
+      className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#14171c] shadow-lg transition-all duration-300 hover:-translate-y-1 hover:border-[#ffb442]/45 hover:shadow-xl hover:shadow-[#ffb442]/10 dark:bg-[#14171c] dark:border-white/10 not-dark:bg-white not-dark:border-slate-200 not-dark:shadow-sm not-dark:hover:border-slate-300"
     >
-      <div className="relative aspect-[4/5] w-full overflow-hidden bg-[#0b0d10] dark:bg-[#0b0d10] not-dark:bg-slate-100">
+      <div
+        role="button"
+        tabIndex={0}
+        onClick={() => onViewDetails(product)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            onViewDetails(product);
+          }
+        }}
+        aria-label={`${t('quickView')} - ${product.name}`}
+        className="relative aspect-[3/4] w-full cursor-pointer overflow-hidden bg-[#090a0d] dark:bg-[#090a0d] not-dark:bg-slate-100 focus:outline-none"
+      >
         <img
           src={product.image}
           alt={product.name}
           loading="lazy"
-          className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
+          className="size-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-[1.045]"
         />
 
         {product.is_featured && (
-          <span className="absolute start-2.5 top-2.5 flex items-center gap-1 rounded-full border border-[#ffb442]/40 bg-[#0b0d10]/80 px-2 py-0.5 text-[10px] font-bold text-[#ffb442] backdrop-blur-md">
-            <Star size={11} className="fill-[#ffb442] text-[#ffb442]" />
+          <span className="absolute start-2.5 top-2.5 flex items-center gap-1 rounded-full border border-[#ffb442]/40 bg-black/55 px-2 py-0.5 text-[10px] font-bold text-[#ffb442] backdrop-blur-md">
+            <Star size={10} className="fill-[#ffb442] text-[#ffb442]" />
             <span>{t('featuredBadge')}</span>
           </span>
         )}
 
         {discount && (
-          <span className="absolute end-2.5 top-2.5 rounded-full bg-rose-600 px-2 py-0.5 text-[10px] font-bold text-white shadow-sm">
+          <span className="absolute end-2.5 top-2.5 rounded-full bg-rose-600/90 backdrop-blur-md px-2 py-0.5 text-[10px] font-bold text-white shadow-sm">
             -{discount}%
           </span>
         )}
 
-        <span className="absolute bottom-2.5 start-2.5 rounded-md border border-white/15 bg-black/60 px-2 py-0.5 font-mono text-[10px] font-semibold text-white/90 backdrop-blur-sm">
+        <span className="absolute bottom-2.5 start-2.5 rounded-md border border-white/15 bg-black/55 px-2 py-0.5 font-mono text-[10px] font-semibold text-white/90 backdrop-blur-md">
           {product.volume}
+        </span>
+
+        <span className="absolute bottom-2.5 end-2.5 flex size-7 items-center justify-center rounded-full border border-white/20 bg-black/55 text-white/80 shadow-md backdrop-blur-md transition-all duration-300 group-hover:scale-110 group-hover:border-[#ffb442]/70 group-hover:bg-[#ffb442] group-hover:text-[#241500]">
+          <Eye size={13} />
         </span>
       </div>
 
@@ -50,7 +72,18 @@ export function ProductCard({ product, onOrder, onShare }: ProductCardProps) {
           {product.category}
         </span>
 
-        <h3 className="luxury-serif mt-1 line-clamp-2 text-sm font-bold text-white dark:text-white not-dark:text-slate-900 sm:text-base">
+        <h3
+          role="button"
+          tabIndex={0}
+          onClick={() => onViewDetails(product)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              onViewDetails(product);
+            }
+          }}
+          className="luxury-serif mt-1 line-clamp-2 cursor-pointer text-sm font-bold text-white transition-colors hover:text-[#ffb442] dark:text-white not-dark:text-slate-900 sm:text-base focus:outline-none"
+        >
           {product.name}
         </h3>
 
