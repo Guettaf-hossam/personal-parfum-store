@@ -45,7 +45,7 @@ export const translations = {
   },
   fr: {
     searchPlaceholder: 'Rechercher un parfum ou une marque...',
-    allCategories: 'Tous',
+    allCategories: 'Tout',
     orderNow: 'Commander',
     share: 'Partager',
     linkCopied: 'Lien copié avec succès !',

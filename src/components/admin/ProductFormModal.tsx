@@ -257,7 +257,7 @@ export function ProductFormModal({ product, onClose, onSuccess }: ProductFormMod
                   <span>{uploading ? 'جاري الضغط والرفع...' : t('uploadImage')}</span>
                   <input
                     type="file"
-                    accept="image/*"
+                    accept="image/png,image/jpeg,image/webp"
                     onChange={handleImageFile}
                     disabled={uploading}
                     className="hidden"

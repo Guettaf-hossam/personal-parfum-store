@@ -10,7 +10,7 @@ export const WILAYAS: Wilaya[] = [
   { code: '07', nameAr: '07 - بسكرة', nameFr: '07 - Biskra' },
   { code: '08', nameAr: '08 - بشار', nameFr: '08 - Béchar' },
   { code: '09', nameAr: '09 - البليدة', nameFr: '09 - Blida' },
-  { code: '10', nameAr: '10 - البويرة', nameFr: '10 - Bouira' },
+  { code: '10', nameAr: '10 - البويرة', nameFr: '10 - Bouïra' },
   { code: '11', nameAr: '11 - تمنراست', nameFr: '11 - Tamanrasset' },
   { code: '12', nameAr: '12 - تبسة', nameFr: '12 - Tébessa' },
   { code: '13', nameAr: '13 - تلمسان', nameFr: '13 - Tlemcen' },

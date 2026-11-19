@@ -1,6 +1,6 @@
 export const STORE_CONFIG = {
-  storeNameAr: 'دار العطور الفاخرة',
-  storeNameFr: 'MAISON DE PARFUM',
+  storeNameAr: 'Y. Parfum',
+  storeNameFr: 'Y. Parfum',
   whatsappNumber: '213781868538',
   currencyAr: 'د.ج',
   currencyFr: 'DA',
