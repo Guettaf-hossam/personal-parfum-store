@@ -58,11 +58,8 @@ export function ProductCard({
           </span>
         )}
 
-        <span
-          dir="ltr"
-          className="absolute bottom-2.5 start-2.5 rounded-md border border-white/15 bg-black/55 px-2 py-0.5 font-mono text-[10px] font-semibold text-white/90 backdrop-blur-md"
-        >
-          {product.volume}
+        <span className="absolute bottom-2.5 start-2.5 rounded-md border border-white/15 bg-black/55 px-2 py-0.5 font-mono text-[10px] font-semibold text-white/90 backdrop-blur-md">
+          <span dir="ltr">{product.volume}</span>
         </span>
 
         <span className="absolute bottom-2.5 end-2.5 flex size-7 items-center justify-center rounded-full border border-white/20 bg-black/55 text-white/80 shadow-md backdrop-blur-md transition-all duration-300 group-hover:scale-110 group-hover:border-[#ffb442]/70 group-hover:bg-[#ffb442] group-hover:text-[#241500]">

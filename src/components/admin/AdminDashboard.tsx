@@ -231,8 +231,8 @@ export function AdminDashboard({ onSignOut }: AdminDashboardProps) {
                     {product.is_active ? t('statusActive') : t('statusHidden')}
                   </span>
 
-                  <span dir="ltr" className="absolute bottom-2 start-2 rounded-md bg-black/60 px-1.5 py-0.5 font-mono text-[9px] text-white/90 backdrop-blur-sm">
-                    {product.volume}
+                  <span className="absolute bottom-2 start-2 rounded-md bg-black/60 px-1.5 py-0.5 font-mono text-[9px] text-white/90 backdrop-blur-sm">
+                    <span dir="ltr">{product.volume}</span>
                   </span>
                 </div>
 

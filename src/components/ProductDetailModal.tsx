@@ -136,8 +136,8 @@ export function ProductDetailModal({
               <span>{t('tapToZoom')}</span>
             </button>
 
-            <span dir="ltr" className="absolute bottom-3 start-3 rounded-md border border-white/20 bg-black/65 px-2.5 py-1 font-mono text-[11px] font-semibold text-white/90 backdrop-blur-md">
-              {product.volume}
+            <span className="absolute bottom-3 start-3 rounded-md border border-white/20 bg-black/65 px-2.5 py-1 font-mono text-[11px] font-semibold text-white/90 backdrop-blur-md">
+              <span dir="ltr">{product.volume}</span>
             </span>
           </div>
 
