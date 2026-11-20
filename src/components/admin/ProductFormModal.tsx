@@ -114,30 +114,30 @@ export function ProductFormModal({ product, onClose, onSuccess }: ProductFormMod
       <div
         role="dialog"
         aria-modal="true"
-        className="w-full max-w-xl max-h-[92vh] overflow-y-auto rounded-3xl border border-white/10 bg-[#14171c] text-white shadow-2xl dark:bg-[#14171c] dark:border-white/10 not-dark:bg-white not-dark:border-slate-200 not-dark:text-slate-900"
+        className="w-full max-w-xl max-h-[92vh] overflow-y-auto rounded-3xl border border-stone-200 bg-white text-[#181512] shadow-2xl dark:border-white/10 dark:bg-[#14171c] dark:text-white"
       >
-        <div className="sticky top-0 z-10 flex items-center justify-between border-b border-white/10 bg-[#14171c]/95 px-5 py-4 backdrop-blur-md dark:bg-[#14171c]/95 not-dark:bg-white/95 not-dark:border-slate-200">
-          <h2 className="text-base font-bold text-white dark:text-white not-dark:text-slate-900">
+        <div className="sticky top-0 z-10 flex items-center justify-between border-b border-stone-200 bg-white/95 px-5 py-4 backdrop-blur-md dark:border-white/10 dark:bg-[#14171c]/95">
+          <h2 className="text-base font-bold text-[#181512] dark:text-white">
             {product ? t('editProduct') : t('addNewProduct')}
           </h2>
           <button
             type="button"
             onClick={onClose}
-            className="flex size-8 items-center justify-center rounded-full text-white/60 hover:bg-white/10 hover:text-white dark:text-white/60 not-dark:text-slate-500"
+            className="flex size-8 items-center justify-center rounded-full text-stone-500 hover:bg-stone-100 hover:text-stone-800 dark:text-white/60 dark:hover:bg-white/10 dark:hover:text-white"
           >
             <X size={18} />
           </button>
         </div>
 
         {errorMsg && (
-          <div className="mx-5 mt-4 rounded-xl border border-rose-500/30 bg-rose-500/10 p-3 text-xs text-rose-400">
+          <div className="mx-5 mt-4 rounded-xl border border-rose-500/30 bg-rose-500/10 p-3 text-xs text-rose-500 dark:text-rose-400">
             {errorMsg}
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="p-5 space-y-4">
           <div>
-            <label className="block mb-1.5 text-xs font-semibold text-white/80 dark:text-white/80 not-dark:text-slate-700">
+            <label className="block mb-1.5 text-xs font-semibold text-stone-700 dark:text-white/80">
               {t('productName')}
             </label>
             <input
@@ -146,22 +146,23 @@ export function ProductFormModal({ product, onClose, onSuccess }: ProductFormMod
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="مثال: عطر فرانكل أسكوت"
-              className="w-full rounded-xl border border-white/10 bg-[#0b0d10] px-3.5 py-2.5 text-sm text-white placeholder-white/30 focus:border-[#ffb442] focus:outline-none dark:bg-[#0b0d10] dark:text-white not-dark:bg-slate-100 not-dark:text-slate-900 not-dark:border-slate-300"
+              className="w-full rounded-xl border border-stone-200 bg-stone-50 px-3.5 py-2.5 text-sm text-[#181512] placeholder-stone-400 focus:border-[#b87a14] focus:outline-none dark:border-white/10 dark:bg-[#0b0d10] dark:text-white dark:placeholder-white/30 dark:focus:border-[#ffb442]"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block mb-1.5 text-xs font-semibold text-white/80 dark:text-white/80 not-dark:text-slate-700">
+              <label className="block mb-1.5 text-xs font-semibold text-stone-700 dark:text-white/80">
                 {t('volume')}
               </label>
               <select
                 value={volume}
                 onChange={(e) => setVolume(e.target.value)}
-                className="w-full rounded-xl border border-white/10 bg-[#0b0d10] px-3.5 py-2.5 text-sm text-white focus:border-[#ffb442] focus:outline-none dark:bg-[#0b0d10] dark:text-white not-dark:bg-slate-100 not-dark:text-slate-900 not-dark:border-slate-300"
+                dir="ltr"
+                className="w-full rounded-xl border border-stone-200 bg-stone-50 px-3.5 py-2.5 text-sm text-[#181512] focus:border-[#b87a14] focus:outline-none dark:border-white/10 dark:bg-[#0b0d10] dark:text-white dark:focus:border-[#ffb442]"
               >
                 {VOLUMES.map((v) => (
-                  <option key={v} value={v} className="bg-[#0b0d10] text-white">
+                  <option key={v} value={v} className="bg-white text-stone-900 dark:bg-[#0b0d10] dark:text-white">
                     {v}
                   </option>
                 ))}
@@ -169,7 +170,7 @@ export function ProductFormModal({ product, onClose, onSuccess }: ProductFormMod
             </div>
 
             <div>
-              <label className="block mb-1.5 text-xs font-semibold text-white/80 dark:text-white/80 not-dark:text-slate-700">
+              <label className="block mb-1.5 text-xs font-semibold text-stone-700 dark:text-white/80">
                 {t('category')}
               </label>
               <input
@@ -179,7 +180,7 @@ export function ProductFormModal({ product, onClose, onSuccess }: ProductFormMod
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
                 placeholder="عساف / هيرش / إبراق / شرقي"
-                className="w-full rounded-xl border border-white/10 bg-[#0b0d10] px-3.5 py-2.5 text-sm text-white placeholder-white/30 focus:border-[#ffb442] focus:outline-none dark:bg-[#0b0d10] dark:text-white not-dark:bg-slate-100 not-dark:text-slate-900 not-dark:border-slate-300"
+                className="w-full rounded-xl border border-stone-200 bg-stone-50 px-3.5 py-2.5 text-sm text-[#181512] placeholder-stone-400 focus:border-[#b87a14] focus:outline-none dark:border-white/10 dark:bg-[#0b0d10] dark:text-white dark:placeholder-white/30 dark:focus:border-[#ffb442]"
               />
               <datalist id="category-suggestions">
                 {DEFAULT_CATEGORIES.map((c) => (
@@ -191,7 +192,7 @@ export function ProductFormModal({ product, onClose, onSuccess }: ProductFormMod
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block mb-1.5 text-xs font-semibold text-white/80 dark:text-white/80 not-dark:text-slate-700">
+              <label className="block mb-1.5 text-xs font-semibold text-stone-700 dark:text-white/80">
                 {t('priceDzd')}
               </label>
               <input
@@ -201,12 +202,12 @@ export function ProductFormModal({ product, onClose, onSuccess }: ProductFormMod
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
                 placeholder="11500"
-                className="w-full rounded-xl border border-white/10 bg-[#0b0d10] px-3.5 py-2.5 text-sm text-white placeholder-white/30 focus:border-[#ffb442] focus:outline-none dark:bg-[#0b0d10] dark:text-white not-dark:bg-slate-100 not-dark:text-slate-900 not-dark:border-slate-300"
+                className="w-full rounded-xl border border-stone-200 bg-stone-50 px-3.5 py-2.5 text-sm text-[#181512] placeholder-stone-400 focus:border-[#b87a14] focus:outline-none dark:border-white/10 dark:bg-[#0b0d10] dark:text-white dark:placeholder-white/30 dark:focus:border-[#ffb442]"
               />
             </div>
 
             <div>
-              <label className="block mb-1.5 text-xs font-semibold text-white/80 dark:text-white/80 not-dark:text-slate-700">
+              <label className="block mb-1.5 text-xs font-semibold text-stone-700 dark:text-white/80">
                 {t('oldPriceDzd')}
               </label>
               <input
@@ -215,13 +216,13 @@ export function ProductFormModal({ product, onClose, onSuccess }: ProductFormMod
                 value={oldPrice}
                 onChange={(e) => setOldPrice(e.target.value)}
                 placeholder="13000"
-                className="w-full rounded-xl border border-white/10 bg-[#0b0d10] px-3.5 py-2.5 text-sm text-white placeholder-white/30 focus:border-[#ffb442] focus:outline-none dark:bg-[#0b0d10] dark:text-white not-dark:bg-slate-100 not-dark:text-slate-900 not-dark:border-slate-300"
+                className="w-full rounded-xl border border-stone-200 bg-stone-50 px-3.5 py-2.5 text-sm text-[#181512] placeholder-stone-400 focus:border-[#b87a14] focus:outline-none dark:border-white/10 dark:bg-[#0b0d10] dark:text-white dark:placeholder-white/30 dark:focus:border-[#ffb442]"
               />
             </div>
           </div>
 
           <div>
-            <label className="block mb-1.5 text-xs font-semibold text-white/80 dark:text-white/80 not-dark:text-slate-700">
+            <label className="block mb-1.5 text-xs font-semibold text-stone-700 dark:text-white/80">
               {t('description')}
             </label>
             <textarea
@@ -229,12 +230,12 @@ export function ProductFormModal({ product, onClose, onSuccess }: ProductFormMod
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="وصف مختصر للمكونات والنفحات العطرية..."
-              className="w-full rounded-xl border border-white/10 bg-[#0b0d10] px-3.5 py-2.5 text-sm text-white placeholder-white/30 focus:border-[#ffb442] focus:outline-none dark:bg-[#0b0d10] dark:text-white not-dark:bg-slate-100 not-dark:text-slate-900 not-dark:border-slate-300"
+              className="w-full rounded-xl border border-stone-200 bg-stone-50 px-3.5 py-2.5 text-sm text-[#181512] placeholder-stone-400 focus:border-[#b87a14] focus:outline-none dark:border-white/10 dark:bg-[#0b0d10] dark:text-white dark:placeholder-white/30 dark:focus:border-[#ffb442]"
             />
           </div>
 
           <div>
-            <label className="block mb-1.5 text-xs font-semibold text-white/80 dark:text-white/80 not-dark:text-slate-700">
+            <label className="block mb-1.5 text-xs font-semibold text-stone-700 dark:text-white/80">
               {t('imageLabel')}
             </label>
 
@@ -243,16 +244,16 @@ export function ProductFormModal({ product, onClose, onSuccess }: ProductFormMod
                 <img
                   src={imageUrl}
                   alt="Preview"
-                  className="size-16 rounded-xl object-cover border border-white/10 bg-black/40"
+                  className="size-16 rounded-xl object-cover border border-stone-200 bg-stone-100 dark:border-white/10 dark:bg-black/40"
                 />
               ) : (
-                <div className="flex size-16 items-center justify-center rounded-xl border border-dashed border-white/20 bg-white/5 text-white/30">
+                <div className="flex size-16 items-center justify-center rounded-xl border border-dashed border-stone-300 bg-stone-100 text-stone-400 dark:border-white/20 dark:bg-white/5 dark:text-white/30">
                   <Upload size={20} />
                 </div>
               )}
 
               <div className="flex-1 space-y-1.5">
-                <label className="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs font-semibold text-white hover:border-[#ffb442] hover:text-[#ffb442] transition-colors dark:border-white/10 dark:bg-white/5 not-dark:bg-slate-100 not-dark:border-slate-300 not-dark:text-slate-700">
+                <label className="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-stone-200 bg-stone-100 px-3 py-2 text-xs font-semibold text-stone-700 hover:border-[#b87a14] hover:text-[#b87a14] transition-colors dark:border-white/10 dark:bg-white/5 dark:text-white dark:hover:border-[#ffb442] dark:hover:text-[#ffb442]">
                   <Upload size={14} />
                   <span>{uploading ? 'جاري الضغط والرفع...' : t('uploadImage')}</span>
                   <input
@@ -268,14 +269,14 @@ export function ProductFormModal({ product, onClose, onSuccess }: ProductFormMod
                   value={imageUrl}
                   onChange={(e) => setImageUrl(e.target.value)}
                   placeholder="/products/... أو رابط خارجي"
-                  className="w-full rounded-lg border border-white/10 bg-[#0b0d10] px-2.5 py-1.5 text-xs text-white/70 focus:border-[#ffb442] focus:outline-none dark:bg-[#0b0d10] not-dark:bg-slate-100 not-dark:text-slate-900 not-dark:border-slate-300"
+                  className="w-full rounded-lg border border-stone-200 bg-stone-50 px-2.5 py-1.5 text-xs text-stone-700 focus:border-[#b87a14] focus:outline-none dark:border-white/10 dark:bg-[#0b0d10] dark:text-white/70 dark:focus:border-[#ffb442]"
                 />
               </div>
             </div>
           </div>
 
-          <div className="flex items-center justify-between rounded-xl border border-white/10 bg-white/5 p-3 dark:border-white/10 dark:bg-white/5 not-dark:bg-slate-50 not-dark:border-slate-200">
-            <label className="flex items-center gap-2 cursor-pointer text-xs font-semibold text-white dark:text-white not-dark:text-slate-800">
+          <div className="flex items-center justify-between rounded-xl border border-stone-200 bg-stone-50 p-3 dark:border-white/10 dark:bg-white/5">
+            <label className="flex items-center gap-2 cursor-pointer text-xs font-semibold text-stone-800 dark:text-white">
               <input
                 type="checkbox"
                 checked={isFeatured}
@@ -285,7 +286,7 @@ export function ProductFormModal({ product, onClose, onSuccess }: ProductFormMod
               <span>{t('featuredProduct')}</span>
             </label>
 
-            <label className="flex items-center gap-2 cursor-pointer text-xs font-semibold text-white dark:text-white not-dark:text-slate-800">
+            <label className="flex items-center gap-2 cursor-pointer text-xs font-semibold text-stone-800 dark:text-white">
               <input
                 type="checkbox"
                 checked={isActive}
@@ -307,7 +308,7 @@ export function ProductFormModal({ product, onClose, onSuccess }: ProductFormMod
             <button
               type="button"
               onClick={onClose}
-              className="rounded-xl border border-white/10 px-4 py-3 text-sm font-semibold text-white/70 hover:bg-white/5 hover:text-white dark:border-white/10 not-dark:border-slate-300 not-dark:text-slate-600"
+              className="rounded-xl border border-stone-200 px-4 py-3 text-sm font-semibold text-stone-600 hover:bg-stone-100 hover:text-stone-900 transition-colors dark:border-white/10 dark:text-white/70 dark:hover:bg-white/5 dark:hover:text-white"
             >
               {t('cancel')}
             </button>

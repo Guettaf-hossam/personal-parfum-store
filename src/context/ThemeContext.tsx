@@ -23,11 +23,8 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     try {
       localStorage.setItem('parfum_store_theme', theme);
     } catch {}
-    if (theme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
+    document.documentElement.classList.toggle('dark', theme === 'dark');
+    document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
 
   const toggleTheme = () => {

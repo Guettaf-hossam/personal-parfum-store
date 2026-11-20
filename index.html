@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" class="dark" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -8,8 +8,17 @@
     <meta name="description" content="Y. Parfum — أرقى العطور الشرقية والنيش الأصلية 100%. توصيل 58 ولاية." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <script>
+      (function() {
+        try {
+          var t = localStorage.getItem('parfum_store_theme') || 'dark';
+          document.documentElement.classList.toggle('dark', t === 'dark');
+          document.documentElement.setAttribute('data-theme', t);
+        } catch (e) {}
+      })();
+    </script>
   </head>
-  <body class="bg-[#0b0d10] text-white antialiased">
+  <body class="bg-[#f6f3ee] text-[#181512] dark:bg-[#08090c] dark:text-[#f5f3ef] antialiased">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

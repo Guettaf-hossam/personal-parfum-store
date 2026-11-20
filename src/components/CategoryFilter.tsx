@@ -33,8 +33,8 @@ export function CategoryFilter({
         onClick={() => onSelectCategory('all')}
         className={`shrink-0 rounded-full px-4 py-1.5 text-xs font-semibold transition-all ${
           selectedCategory === 'all'
-            ? 'bg-[#ffb442] text-[#241500] shadow-sm shadow-[#ffb442]/20 font-bold'
-            : 'border border-white/10 bg-[#14171c] text-white/75 hover:border-[#ffb442]/30 hover:text-white dark:bg-[#14171c] dark:border-white/10 dark:text-white/75 not-dark:bg-white not-dark:border-slate-200 not-dark:text-slate-600 not-dark:hover:border-slate-300'
+            ? 'bg-[#b87a14] text-white shadow-sm font-bold dark:bg-[#ffb442] dark:text-[#241500] dark:shadow-[#ffb442]/20'
+            : 'border border-stone-200 bg-white text-stone-600 shadow-sm hover:border-[#b87a14]/40 hover:text-stone-900 dark:border-white/10 dark:bg-[#14171c] dark:text-white/75 dark:shadow-none dark:hover:border-[#ffb442]/30 dark:hover:text-white'
         }`}
       >
         {t('allCategories')}
@@ -47,8 +47,8 @@ export function CategoryFilter({
           onClick={() => onSelectCategory(cat)}
           className={`shrink-0 rounded-full px-4 py-1.5 text-xs font-semibold transition-all ${
             selectedCategory === cat
-              ? 'bg-[#ffb442] text-[#241500] shadow-sm shadow-[#ffb442]/20 font-bold'
-              : 'border border-white/10 bg-[#14171c] text-white/75 hover:border-[#ffb442]/30 hover:text-white dark:bg-[#14171c] dark:border-white/10 dark:text-white/75 not-dark:bg-white not-dark:border-slate-200 not-dark:text-slate-600 not-dark:hover:border-slate-300'
+              ? 'bg-[#b87a14] text-white shadow-sm font-bold dark:bg-[#ffb442] dark:text-[#241500] dark:shadow-[#ffb442]/20'
+              : 'border border-stone-200 bg-white text-stone-600 shadow-sm hover:border-[#b87a14]/40 hover:text-stone-900 dark:border-white/10 dark:bg-[#14171c] dark:text-white/75 dark:shadow-none dark:hover:border-[#ffb442]/30 dark:hover:text-white'
           }`}
         >
           {getCategoryLabel(cat)}

@@ -84,49 +84,49 @@ export function OrderModal({ product, onClose }: OrderModalProps) {
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
-      className="fixed inset-0 z-50 flex items-end justify-center bg-black/85 backdrop-blur-md p-0 sm:items-center sm:p-4 animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 flex items-end justify-center bg-black/80 backdrop-blur-md p-0 sm:items-center sm:p-4 animate-in fade-in duration-200"
     >
       <div
         role="dialog"
         aria-modal="true"
-        className="w-full max-w-lg max-h-[92vh] overflow-y-auto rounded-t-3xl border border-[#ffb442]/25 bg-[#0e1015]/95 text-white shadow-2xl backdrop-blur-xl sm:rounded-3xl dark:bg-[#0e1015]/95 dark:border-[#ffb442]/25 not-dark:bg-white not-dark:border-slate-200 not-dark:text-slate-900"
+        className="w-full max-w-lg max-h-[92vh] overflow-y-auto rounded-t-3xl border border-stone-200 bg-white/95 text-[#181512] shadow-2xl backdrop-blur-xl sm:rounded-3xl dark:border-[#ffb442]/25 dark:bg-[#0e1015]/95 dark:text-white"
       >
-        <div className="sticky top-0 z-10 flex items-center justify-between border-b border-white/10 bg-[#0e1015]/95 px-5 py-3.5 backdrop-blur-md dark:bg-[#0e1015]/95 dark:border-white/10 not-dark:bg-white/95 not-dark:border-slate-200">
-          <h2 className="text-base font-bold text-white dark:text-white not-dark:text-slate-900">
+        <div className="sticky top-0 z-10 flex items-center justify-between border-b border-stone-200 bg-white/95 px-5 py-3.5 backdrop-blur-md dark:border-white/10 dark:bg-[#0e1015]/95">
+          <h2 className="text-base font-bold text-[#181512] dark:text-white">
             {t('orderModalTitle')}
           </h2>
           <button
             type="button"
             onClick={onClose}
             aria-label={t('close')}
-            className="flex size-8 items-center justify-center rounded-full text-white/60 hover:bg-white/10 hover:text-white transition-colors dark:text-white/60 not-dark:text-slate-500 not-dark:hover:bg-slate-100 not-dark:hover:text-slate-800"
+            className="flex size-8 items-center justify-center rounded-full text-stone-500 hover:bg-stone-100 hover:text-stone-800 transition-colors dark:text-white/60 dark:hover:bg-white/10 dark:hover:text-white"
           >
             <X size={18} />
           </button>
         </div>
 
         <form onSubmit={handleSubmit} className="p-5 space-y-4">
-          <div className="flex items-center gap-3.5 rounded-2xl border border-[#ffb442]/20 bg-[#090a0d] p-3 dark:bg-[#090a0d] not-dark:bg-slate-50 not-dark:border-slate-200">
+          <div className="flex items-center gap-3.5 rounded-2xl border border-stone-200 bg-stone-50 p-3 dark:border-[#ffb442]/20 dark:bg-[#090a0d]">
             <img
               src={product.image}
               alt={product.name}
-              className="h-[85px] w-16 shrink-0 rounded-xl object-cover object-center ring-1 ring-[#ffb442]/30 bg-black/40 aspect-[3/4]"
+              className="h-[85px] w-16 shrink-0 rounded-xl object-cover object-center ring-1 ring-stone-200 dark:ring-[#ffb442]/30 bg-stone-100 dark:bg-black/40 aspect-[3/4]"
             />
             <div className="flex-1 min-w-0">
-              <span className="text-[10px] font-bold text-[#ffb442]">
-                {product.volume} · {product.category}
+              <span className="text-[10px] font-bold text-[#b87a14] dark:text-[#ffb442]">
+                <span dir="ltr">{product.volume}</span> · {product.category}
               </span>
-              <h3 className="truncate text-sm font-bold text-white dark:text-white not-dark:text-slate-900">
+              <h3 className="truncate text-sm font-bold text-[#181512] dark:text-white">
                 {product.name}
               </h3>
-              <p className="text-sm font-extrabold text-[#ffb442]">
+              <p className="text-sm font-extrabold text-[#b87a14] dark:text-[#ffb442]">
                 {formatPrice(product.price, language)}
               </p>
             </div>
           </div>
 
           <div>
-            <label className="block mb-1.5 text-xs font-semibold text-white/80 dark:text-white/80 not-dark:text-slate-700">
+            <label className="block mb-1.5 text-xs font-semibold text-stone-700 dark:text-white/80">
               {t('customerName')}
             </label>
             <input
@@ -135,12 +135,12 @@ export function OrderModal({ product, onClose }: OrderModalProps) {
               value={customerName}
               onChange={(e) => setCustomerName(e.target.value)}
               placeholder="محمد أمين / Amine"
-              className="w-full rounded-xl border border-white/10 bg-[#090a0d] px-3.5 py-2.5 text-sm text-white placeholder-white/30 focus:border-[#ffb442] focus:outline-none dark:bg-[#090a0d] dark:text-white not-dark:bg-slate-100 not-dark:text-slate-900 not-dark:placeholder-slate-400 not-dark:border-slate-300"
+              className="w-full rounded-xl border border-stone-200 bg-stone-50 px-3.5 py-2.5 text-sm text-[#181512] placeholder-stone-400 focus:border-[#b87a14] focus:outline-none dark:border-white/10 dark:bg-[#090a0d] dark:text-white dark:placeholder-white/30 dark:focus:border-[#ffb442]"
             />
           </div>
 
           <div>
-            <label className="block mb-1.5 text-xs font-semibold text-white/80 dark:text-white/80 not-dark:text-slate-700">
+            <label className="block mb-1.5 text-xs font-semibold text-stone-700 dark:text-white/80">
               {t('customerPhone')}
             </label>
             <input
@@ -149,33 +149,33 @@ export function OrderModal({ product, onClose }: OrderModalProps) {
               value={customerPhone}
               onChange={(e) => setCustomerPhone(e.target.value)}
               placeholder="05 / 06 / 07 ..."
-              className="w-full rounded-xl border border-white/10 bg-[#090a0d] px-3.5 py-2.5 text-sm text-white placeholder-white/30 focus:border-[#ffb442] focus:outline-none dark:bg-[#090a0d] dark:text-white not-dark:bg-slate-100 not-dark:text-slate-900 not-dark:placeholder-slate-400 not-dark:border-slate-300"
+              className="w-full rounded-xl border border-stone-200 bg-stone-50 px-3.5 py-2.5 text-sm text-[#181512] placeholder-stone-400 focus:border-[#b87a14] focus:outline-none dark:border-white/10 dark:bg-[#090a0d] dark:text-white dark:placeholder-white/30 dark:focus:border-[#ffb442]"
             />
           </div>
 
           <div>
-            <label className="block mb-1.5 text-xs font-semibold text-white/80 dark:text-white/80 not-dark:text-slate-700">
+            <label className="block mb-1.5 text-xs font-semibold text-stone-700 dark:text-white/80">
               {t('wilaya')}
             </label>
             <select
               required
               value={selectedWilaya}
               onChange={(e) => setSelectedWilaya(e.target.value)}
-              className="w-full rounded-xl border border-white/10 bg-[#090a0d] px-3.5 py-2.5 text-sm text-white focus:border-[#ffb442] focus:outline-none dark:bg-[#090a0d] dark:text-white not-dark:bg-slate-100 not-dark:text-slate-900 not-dark:border-slate-300"
+              className="w-full rounded-xl border border-stone-200 bg-stone-50 px-3.5 py-2.5 text-sm text-[#181512] focus:border-[#b87a14] focus:outline-none dark:border-white/10 dark:bg-[#090a0d] dark:text-white dark:focus:border-[#ffb442]"
             >
-              <option value="" disabled className="text-white/40">
+              <option value="" disabled className="text-stone-400 dark:text-white/40">
                 {t('selectWilaya')}
               </option>
               {WILAYAS.map((w) => (
-                <option key={w.code} value={w.code} className="bg-[#14171c] text-white not-dark:bg-white not-dark:text-slate-900">
+                <option key={w.code} value={w.code} className="bg-white text-stone-900 dark:bg-[#14171c] dark:text-white">
                   {language === 'ar' ? w.nameAr : w.nameFr}
                 </option>
               ))}
             </select>
           </div>
 
-          <div className="flex items-center justify-between rounded-xl border border-white/10 bg-[#090a0d] p-3 dark:bg-[#090a0d] not-dark:bg-slate-50 not-dark:border-slate-200">
-            <span className="text-xs font-semibold text-white/80 dark:text-white/80 not-dark:text-slate-700">
+          <div className="flex items-center justify-between rounded-xl border border-stone-200 bg-stone-50 p-3 dark:border-white/10 dark:bg-[#090a0d]">
+            <span className="text-xs font-semibold text-stone-700 dark:text-white/80">
               {t('quantity')}
             </span>
             <div className="flex items-center gap-3">
@@ -183,28 +183,28 @@ export function OrderModal({ product, onClose }: OrderModalProps) {
                 type="button"
                 onClick={() => setQuantity((q) => Math.max(1, q - 1))}
                 disabled={quantity <= 1}
-                className="flex size-7 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-white hover:bg-white/15 disabled:opacity-30 dark:border-white/10 not-dark:border-slate-300 not-dark:text-slate-700"
+                className="flex size-7 items-center justify-center rounded-lg border border-stone-200 bg-white text-stone-700 hover:bg-stone-100 disabled:opacity-30 dark:border-white/10 dark:bg-white/5 dark:text-white dark:hover:bg-white/15"
               >
                 <Minus size={13} />
               </button>
-              <span className="w-6 text-center font-bold text-sm text-white dark:text-white not-dark:text-slate-900">
+              <span className="w-6 text-center font-bold text-sm text-[#181512] dark:text-white">
                 {quantity}
               </span>
               <button
                 type="button"
                 onClick={() => setQuantity((q) => q + 1)}
-                className="flex size-7 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-white hover:bg-white/15 dark:border-white/10 not-dark:border-slate-300 not-dark:text-slate-700"
+                className="flex size-7 items-center justify-center rounded-lg border border-stone-200 bg-white text-stone-700 hover:bg-stone-100 dark:border-white/10 dark:bg-white/5 dark:text-white dark:hover:bg-white/15"
               >
                 <Plus size={13} />
               </button>
             </div>
           </div>
 
-          <div className="flex items-center justify-between pt-2 border-t border-white/10 not-dark:border-slate-200">
-            <span className="text-xs font-bold text-white/70 dark:text-white/70 not-dark:text-slate-600">
+          <div className="flex items-center justify-between pt-2 border-t border-stone-200 dark:border-white/10">
+            <span className="text-xs font-bold text-stone-600 dark:text-white/70">
               {t('totalPrice')}
             </span>
-            <span className="text-lg font-extrabold text-[#ffb442]">
+            <span className="text-lg font-extrabold text-[#b87a14] dark:text-[#ffb442]">
               {formatPrice(totalPrice, language)}
             </span>
           </div>

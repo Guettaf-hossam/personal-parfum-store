@@ -23,7 +23,7 @@ export function ProductCard({
   return (
     <article
       id={`product-${product.id}`}
-      className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#14171c] shadow-lg transition-all duration-300 hover:-translate-y-1 hover:border-[#ffb442]/45 hover:shadow-xl hover:shadow-[#ffb442]/10 dark:bg-[#14171c] dark:border-white/10 not-dark:bg-white not-dark:border-slate-200 not-dark:shadow-sm not-dark:hover:border-slate-300"
+      className="group relative flex flex-col overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#b87a14]/40 hover:shadow-lg hover:shadow-stone-200/50 dark:border-white/10 dark:bg-[#14171c] dark:hover:border-[#ffb442]/45 dark:hover:shadow-xl dark:hover:shadow-[#ffb442]/10"
     >
       <div
         role="button"
@@ -36,7 +36,7 @@ export function ProductCard({
           }
         }}
         aria-label={`${t('quickView')} - ${product.name}`}
-        className="relative aspect-[3/4] w-full cursor-pointer overflow-hidden bg-[#090a0d] dark:bg-[#090a0d] not-dark:bg-slate-100 focus:outline-none"
+        className="relative aspect-[3/4] w-full cursor-pointer overflow-hidden bg-[#090a0d] focus:outline-none"
       >
         <img
           src={product.image}
@@ -58,7 +58,10 @@ export function ProductCard({
           </span>
         )}
 
-        <span className="absolute bottom-2.5 start-2.5 rounded-md border border-white/15 bg-black/55 px-2 py-0.5 font-mono text-[10px] font-semibold text-white/90 backdrop-blur-md">
+        <span
+          dir="ltr"
+          className="absolute bottom-2.5 start-2.5 rounded-md border border-white/15 bg-black/55 px-2 py-0.5 font-mono text-[10px] font-semibold text-white/90 backdrop-blur-md"
+        >
           {product.volume}
         </span>
 
@@ -68,7 +71,7 @@ export function ProductCard({
       </div>
 
       <div className="flex flex-1 flex-col p-3 sm:p-4">
-        <span className="text-[11px] font-medium text-white/50 dark:text-white/50 not-dark:text-slate-500">
+        <span className="text-[11px] font-medium text-stone-500 dark:text-white/50">
           {product.category}
         </span>
 
@@ -82,17 +85,17 @@ export function ProductCard({
               onViewDetails(product);
             }
           }}
-          className="luxury-serif mt-1 line-clamp-2 cursor-pointer text-sm font-bold text-white transition-colors hover:text-[#ffb442] dark:text-white not-dark:text-slate-900 sm:text-base focus:outline-none"
+          className="luxury-serif mt-1 line-clamp-2 cursor-pointer text-sm font-bold text-[#181512] transition-colors group-hover:text-[#b87a14] dark:text-[#f5f3ef] dark:group-hover:text-[#ffb442] sm:text-base focus:outline-none"
         >
           {product.name}
         </h3>
 
         <div className="mt-2.5 flex items-baseline gap-2">
-          <span className="text-base font-extrabold text-[#ffb442] sm:text-lg">
+          <span className="text-base font-extrabold text-[#b87a14] dark:text-[#ffb442] sm:text-lg">
             {formatPrice(product.price, language)}
           </span>
           {product.old_price && product.old_price > product.price && (
-            <span className="text-xs text-white/40 line-through dark:text-white/40 not-dark:text-slate-400">
+            <span className="text-xs text-stone-400 line-through dark:text-white/40">
               {formatPrice(product.old_price, language)}
             </span>
           )}
@@ -102,7 +105,7 @@ export function ProductCard({
           <button
             type="button"
             onClick={() => onOrder(product)}
-            className="flex-1 rounded-xl bg-[#ffb442] px-3 py-2 text-xs font-bold text-[#241500] shadow-sm transition-all hover:bg-[#ffc164] active:scale-95 sm:text-sm"
+            className="flex-1 rounded-xl bg-[#b87a14] px-3 py-2 text-xs font-bold text-white shadow-sm transition-all hover:bg-[#a66b0e] active:scale-95 dark:bg-[#ffb442] dark:text-[#241500] dark:hover:bg-[#ffc164] sm:text-sm"
           >
             {t('orderNow')}
           </button>
@@ -111,7 +114,7 @@ export function ProductCard({
             type="button"
             onClick={() => onShare(product)}
             aria-label={t('share')}
-            className="flex size-9 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white/75 hover:border-[#ffb442]/40 hover:text-[#ffb442] transition-colors dark:border-white/10 dark:bg-white/5 dark:text-white/75 not-dark:border-slate-200 not-dark:bg-slate-100 not-dark:text-slate-600 not-dark:hover:text-slate-900"
+            className="flex size-9 shrink-0 items-center justify-center rounded-xl border border-stone-200 bg-stone-100 text-stone-600 transition-colors hover:border-[#b87a14]/40 hover:text-[#b87a14] dark:border-white/10 dark:bg-white/5 dark:text-white/75 dark:hover:border-[#ffb442]/40 dark:hover:text-[#ffb442]"
           >
             <Share2 size={15} />
           </button>

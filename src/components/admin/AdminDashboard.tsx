@@ -88,14 +88,14 @@ export function AdminDashboard({ onSignOut }: AdminDashboardProps) {
   };
 
   return (
-    <div className="min-h-screen bg-[#0b0d10] text-white dark:bg-[#0b0d10] not-dark:bg-slate-50 not-dark:text-slate-900 pb-20">
-      <header className="sticky top-0 z-30 border-b border-white/10 bg-[#14171c]/95 px-4 py-3 backdrop-blur-md dark:bg-[#14171c]/95 dark:border-white/10 not-dark:bg-white/95 not-dark:border-slate-200">
+    <div className="min-h-screen bg-stone-50 text-[#181512] dark:bg-[#0b0d10] dark:text-white pb-20">
+      <header className="sticky top-0 z-30 border-b border-stone-200 bg-white/95 px-4 py-3 backdrop-blur-md dark:border-white/10 dark:bg-[#14171c]/95">
         <div className="container-shell flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <h1 className="luxury-serif text-lg font-bold text-white dark:text-white not-dark:text-slate-900 sm:text-xl">
+            <h1 className="luxury-serif text-lg font-bold text-[#181512] dark:text-white sm:text-xl">
               {t('adminTitle')}
             </h1>
-            <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-0.5 text-xs text-white/60 dark:text-white/60 not-dark:text-slate-500">
+            <span className="rounded-full border border-stone-200 bg-stone-100 px-2.5 py-0.5 text-xs text-stone-600 dark:border-white/10 dark:bg-white/5 dark:text-white/60">
               {t('productsCount', { count: products.length })}
             </span>
           </div>
@@ -112,7 +112,7 @@ export function AdminDashboard({ onSignOut }: AdminDashboardProps) {
 
             <a
               href="/"
-              className="flex items-center gap-1.5 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs font-semibold text-white/80 hover:text-white hover:border-white/30 transition-colors dark:border-white/10 dark:text-white/80 not-dark:border-slate-300 not-dark:bg-slate-100 not-dark:text-slate-700"
+              className="flex items-center gap-1.5 rounded-xl border border-stone-200 bg-stone-100 px-3 py-2 text-xs font-semibold text-stone-700 hover:text-stone-900 hover:border-stone-300 transition-colors dark:border-white/10 dark:bg-white/5 dark:text-white/80 dark:hover:text-white"
             >
               <Store size={15} />
               <span className="hidden sm:inline">{t('viewStore')}</span>
@@ -122,7 +122,7 @@ export function AdminDashboard({ onSignOut }: AdminDashboardProps) {
               type="button"
               onClick={handleSignOut}
               title={t('signOut')}
-              className="flex size-9 items-center justify-center rounded-xl border border-rose-500/20 bg-rose-500/10 text-rose-400 hover:bg-rose-500/20 transition-colors"
+              className="flex size-9 items-center justify-center rounded-xl border border-rose-500/20 bg-rose-500/10 text-rose-500 hover:bg-rose-500/20 transition-colors dark:text-rose-400"
             >
               <LogOut size={16} />
             </button>
@@ -133,20 +133,20 @@ export function AdminDashboard({ onSignOut }: AdminDashboardProps) {
       <main className="container-shell mt-6">
         {loading ? (
           <div className="flex h-64 items-center justify-center">
-            <div className="size-8 animate-spin rounded-full border-2 border-[#ffb442] border-t-transparent" />
+            <div className="size-8 animate-spin rounded-full border-2 border-[#b87a14] dark:border-[#ffb442] border-t-transparent" />
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
             {products.map((product) => (
               <div
                 key={product.id}
-                className={`relative flex flex-col overflow-hidden rounded-2xl border bg-[#14171c] shadow-md transition-all dark:bg-[#14171c] not-dark:bg-white ${
+                className={`relative flex flex-col overflow-hidden rounded-2xl border bg-white shadow-md transition-all dark:bg-[#14171c] ${
                   product.is_active
-                    ? 'border-white/10 dark:border-white/10 not-dark:border-slate-200'
-                    : 'border-white/5 opacity-60 dark:border-white/5 not-dark:border-slate-200'
+                    ? 'border-stone-200 dark:border-white/10'
+                    : 'border-stone-200/60 opacity-60 dark:border-white/5'
                 }`}
               >
-                <div className="relative aspect-[4/5] w-full overflow-hidden bg-[#0b0d10]">
+                <div className="relative aspect-[4/5] w-full overflow-hidden bg-stone-100 dark:bg-[#0b0d10]">
                   <img
                     src={product.image}
                     alt={product.name}
@@ -156,43 +156,43 @@ export function AdminDashboard({ onSignOut }: AdminDashboardProps) {
                   <span
                     className={`absolute start-2 top-2 rounded-full px-2 py-0.5 text-[10px] font-bold ${
                       product.is_active
-                        ? 'bg-emerald-500/90 text-white shadow-sm'
-                        : 'bg-zinc-700/90 text-zinc-300'
+                        ? 'bg-emerald-600 text-white shadow-sm'
+                        : 'bg-zinc-600 text-zinc-100'
                     }`}
                   >
                     {product.is_active ? t('statusActive') : t('statusHidden')}
                   </span>
 
-                  <span className="absolute bottom-2 start-2 rounded-md bg-black/60 px-1.5 py-0.5 font-mono text-[9px] text-white/80 backdrop-blur-sm">
+                  <span dir="ltr" className="absolute bottom-2 start-2 rounded-md bg-black/60 px-1.5 py-0.5 font-mono text-[9px] text-white/90 backdrop-blur-sm">
                     {product.volume}
                   </span>
                 </div>
 
                 <div className="flex flex-1 flex-col p-3">
-                  <span className="text-[10px] font-medium text-white/50 dark:text-white/50 not-dark:text-slate-500">
+                  <span className="text-[10px] font-medium text-stone-500 dark:text-white/50">
                     {product.category}
                   </span>
-                  <h3 className="line-clamp-1 text-xs font-bold text-white dark:text-white not-dark:text-slate-900 sm:text-sm">
+                  <h3 className="line-clamp-1 text-xs font-bold text-[#181512] dark:text-white sm:text-sm">
                     {product.name}
                   </h3>
 
                   <div className="mt-1.5 flex items-baseline gap-1.5">
-                    <span className="text-xs font-black text-[#ffb442] sm:text-sm">
+                    <span className="text-xs font-black text-[#b87a14] dark:text-[#ffb442] sm:text-sm">
                       {formatPrice(product.price, language)}
                     </span>
                     {product.old_price && (
-                      <span className="text-[10px] text-white/40 line-through dark:text-white/40 not-dark:text-slate-400">
+                      <span className="text-[10px] text-stone-400 line-through dark:text-white/40">
                         {formatPrice(product.old_price, language)}
                       </span>
                     )}
                   </div>
 
-                  <div className="mt-auto pt-3 grid grid-cols-4 gap-1 border-t border-white/10 dark:border-white/10 not-dark:border-slate-100">
+                  <div className="mt-auto pt-3 grid grid-cols-4 gap-1 border-t border-stone-100 dark:border-white/10">
                     <button
                       type="button"
                       onClick={() => handleDelete(product.id)}
                       title="حذف"
-                      className="flex h-8 items-center justify-center rounded-lg text-rose-400 hover:bg-rose-500/10 transition-colors"
+                      className="flex h-8 items-center justify-center rounded-lg text-rose-500 hover:bg-rose-500/10 transition-colors"
                     >
                       <Trash2 size={15} />
                     </button>
@@ -201,7 +201,7 @@ export function AdminDashboard({ onSignOut }: AdminDashboardProps) {
                       type="button"
                       onClick={() => handleEditClick(product)}
                       title="تعديل"
-                      className="flex h-8 items-center justify-center rounded-lg text-[#ffb442] hover:bg-[#ffb442]/10 transition-colors"
+                      className="flex h-8 items-center justify-center rounded-lg text-[#b87a14] dark:text-[#ffb442] hover:bg-[#ffb442]/10 transition-colors"
                     >
                       <Pencil size={15} />
                     </button>
@@ -210,16 +210,16 @@ export function AdminDashboard({ onSignOut }: AdminDashboardProps) {
                       type="button"
                       onClick={() => handleToggleActive(product)}
                       title={product.is_active ? 'إخفاء' : 'إظهار'}
-                      className="flex h-8 items-center justify-center rounded-lg text-white/70 hover:bg-white/10 hover:text-white transition-colors dark:text-white/70 not-dark:text-slate-600"
+                      className="flex h-8 items-center justify-center rounded-lg text-stone-600 hover:bg-stone-100 dark:text-white/70 dark:hover:bg-white/10 transition-colors"
                     >
-                      {product.is_active ? <Eye size={15} /> : <EyeOff size={15} className="text-zinc-500" />}
+                      {product.is_active ? <Eye size={15} /> : <EyeOff size={15} className="text-stone-400 dark:text-zinc-500" />}
                     </button>
 
                     <button
                       type="button"
                       onClick={() => handleShare(product)}
                       title="مشاركة الرابط"
-                      className="flex h-8 items-center justify-center rounded-lg text-sky-400 hover:bg-sky-500/10 transition-colors"
+                      className="flex h-8 items-center justify-center rounded-lg text-sky-600 dark:text-sky-400 hover:bg-sky-500/10 transition-colors"
                     >
                       <Share2 size={15} />
                     </button>

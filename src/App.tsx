@@ -87,7 +87,7 @@ function Storefront() {
   }, [products, selectedCategory, searchQuery]);
 
   return (
-    <div className="min-h-screen bg-[#0b0d10] text-white dark:bg-[#0b0d10] dark:text-white not-dark:bg-[#f8fafc] not-dark:text-slate-900 transition-colors duration-200 flex flex-col justify-between">
+    <div className="min-h-screen bg-[#f6f3ee] text-[#181512] transition-colors duration-200 flex flex-col justify-between dark:bg-[#08090c] dark:text-[#f5f3ef]">
       <div>
         <SiteHeader
           searchQuery={searchQuery}
@@ -106,9 +106,9 @@ function Storefront() {
           </div>
 
           {filteredProducts.length === 0 ? (
-            <div className="flex min-h-[40vh] flex-col items-center justify-center rounded-3xl border border-white/5 bg-[#14171c]/50 p-8 text-center dark:bg-[#14171c]/50 not-dark:bg-white not-dark:border-slate-200">
-              <span className="text-3xl mb-2">✦</span>
-              <p className="text-sm font-semibold text-white/70 dark:text-white/70 not-dark:text-slate-600">
+            <div className="flex min-h-[40vh] flex-col items-center justify-center rounded-3xl border border-stone-200 bg-white/70 p-8 text-center shadow-sm dark:border-white/5 dark:bg-[#14171c]/50">
+              <span className="text-3xl mb-2 text-[#b87a14] dark:text-[#ffb442]">✦</span>
+              <p className="text-sm font-semibold text-stone-600 dark:text-white/70">
                 {t('emptyCatalog')}
               </p>
               <button
@@ -117,7 +117,7 @@ function Storefront() {
                   setSelectedCategory('all');
                   setSearchQuery('');
                 }}
-                className="mt-4 rounded-xl bg-[#ffb442] px-4 py-2 text-xs font-bold text-[#241500]"
+                className="mt-4 rounded-xl bg-[#b87a14] px-4 py-2 text-xs font-bold text-white transition-all hover:brightness-105 dark:bg-[#ffb442] dark:text-[#241500]"
               >
                 {t('allCategories')}
               </button>
@@ -189,8 +189,8 @@ function AdminApp() {
 
   if (checking) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#0b0d10]">
-        <div className="size-8 animate-spin rounded-full border-2 border-[#ffb442] border-t-transparent" />
+      <div className="flex min-h-screen items-center justify-center bg-[#f6f3ee] dark:bg-[#08090c]">
+        <div className="size-8 animate-spin rounded-full border-2 border-[#b87a14] border-t-transparent dark:border-[#ffb442]" />
       </div>
     );
   }
