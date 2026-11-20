@@ -1,5 +1,5 @@
 import { Eye, EyeOff, LogOut, Pencil, Plus, Share2, Store, Trash2 } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { deleteProduct, getAllProductsAdmin, supabase, toggleProductActive } from '../../lib/supabase';
 import { Product } from '../../types';
@@ -18,49 +18,117 @@ export function AdminDashboard({ onSignOut }: AdminDashboardProps) {
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [busyId, setBusyId] = useState<string | null>(null);
 
-  const loadProducts = async () => {
+  const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const showToast = useCallback((msg: string) => {
+    if (toastTimerRef.current) {
+      clearTimeout(toastTimerRef.current);
+    }
+    setToastMessage(msg);
+    toastTimerRef.current = setTimeout(() => {
+      setToastMessage(null);
+      toastTimerRef.current = null;
+    }, 2500);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (toastTimerRef.current) {
+        clearTimeout(toastTimerRef.current);
+      }
+    };
+  }, []);
+
+  const loadProducts = useCallback(async () => {
     setLoading(true);
-    const data = await getAllProductsAdmin();
-    setProducts(data);
-    setLoading(false);
-  };
+    try {
+      const data = await getAllProductsAdmin();
+      setProducts(data);
+    } catch {
+      showToast(t('actionFailed'));
+    } finally {
+      setLoading(false);
+    }
+  }, [showToast, t]);
 
   useEffect(() => {
     void loadProducts();
-  }, []);
+  }, [loadProducts]);
 
   const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    onSignOut();
-  };
-
-  const showToast = (msg: string) => {
-    setToastMessage(msg);
-    setTimeout(() => setToastMessage(null), 2500);
+    try {
+      await supabase.auth.signOut();
+      onSignOut();
+    } catch {
+      showToast(t('actionFailed'));
+    }
   };
 
   const handleDelete = async (id: string) => {
+    if (busyId) return;
     if (window.confirm(t('deleteConfirm'))) {
-      await deleteProduct(id);
-      setProducts((prev) => prev.filter((p) => p.id !== id));
-      showToast('تم حذف المنتج');
+      setBusyId(id);
+      try {
+        await deleteProduct(id);
+        setProducts((prev) => prev.filter((p) => p.id !== id));
+        showToast(t('deleted'));
+      } catch {
+        showToast(t('actionFailed'));
+      } finally {
+        setBusyId(null);
+      }
     }
   };
 
   const handleToggleActive = async (product: Product) => {
-    const updated = await toggleProductActive(product.id, product.is_active);
-    setProducts((prev) =>
-      prev.map((p) => (p.id === product.id ? { ...p, is_active: updated } : p))
-    );
-    showToast(updated ? 'المنتج نشط الآن' : 'تم إخفاء المنتج');
+    if (busyId) return;
+    setBusyId(product.id);
+    try {
+      const updated = await toggleProductActive(product.id, product.is_active);
+      setProducts((prev) =>
+        prev.map((p) => (p.id === product.id ? { ...p, is_active: updated } : p))
+      );
+      showToast(updated ? t('activated') : t('hidden'));
+    } catch {
+      showToast(t('actionFailed'));
+    } finally {
+      setBusyId(null);
+    }
   };
 
-  const handleShare = (product: Product) => {
+  const handleShare = async (product: Product) => {
     const url = `${window.location.origin}/#product-${product.id}`;
-    if (navigator.clipboard) {
-      void navigator.clipboard.writeText(url);
+    let copied = false;
+    if (navigator.clipboard && window.isSecureContext) {
+      try {
+        await navigator.clipboard.writeText(url);
+        copied = true;
+      } catch {
+        copied = false;
+      }
+    }
+    if (!copied) {
+      try {
+        const textArea = document.createElement('textarea');
+        textArea.value = url;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-9999px';
+        textArea.style.top = '0';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        copied = document.execCommand('copy');
+        document.body.removeChild(textArea);
+      } catch {
+        copied = false;
+      }
+    }
+    if (copied) {
       showToast(t('linkCopied'));
+    } else {
+      showToast(t('copyFailed'));
     }
   };
 
@@ -84,7 +152,7 @@ export function AdminDashboard({ onSignOut }: AdminDashboardProps) {
       }
       return [saved, ...prev];
     });
-    showToast('تم حفظ المنتج بنجاح');
+    showToast(t('saved'));
   };
 
   return (
@@ -146,7 +214,7 @@ export function AdminDashboard({ onSignOut }: AdminDashboardProps) {
                     : 'border-stone-200/60 opacity-60 dark:border-white/5'
                 }`}
               >
-                <div className="relative aspect-[4/5] w-full overflow-hidden bg-stone-100 dark:bg-[#0b0d10]">
+                <div className="relative aspect-[3/4] w-full overflow-hidden bg-stone-100 dark:bg-[#0b0d10]">
                   <img
                     src={product.image}
                     alt={product.name}
@@ -191,8 +259,9 @@ export function AdminDashboard({ onSignOut }: AdminDashboardProps) {
                     <button
                       type="button"
                       onClick={() => handleDelete(product.id)}
-                      title="حذف"
-                      className="flex h-8 items-center justify-center rounded-lg text-rose-500 hover:bg-rose-500/10 transition-colors"
+                      title={language === 'ar' ? 'حذف' : 'Supprimer'}
+                      disabled={busyId === product.id}
+                      className="flex h-8 items-center justify-center rounded-lg text-rose-500 hover:bg-rose-500/10 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                     >
                       <Trash2 size={15} />
                     </button>
@@ -200,8 +269,9 @@ export function AdminDashboard({ onSignOut }: AdminDashboardProps) {
                     <button
                       type="button"
                       onClick={() => handleEditClick(product)}
-                      title="تعديل"
-                      className="flex h-8 items-center justify-center rounded-lg text-[#b87a14] dark:text-[#ffb442] hover:bg-[#ffb442]/10 transition-colors"
+                      title={t('editProduct')}
+                      disabled={busyId === product.id}
+                      className="flex h-8 items-center justify-center rounded-lg text-[#b87a14] dark:text-[#ffb442] hover:bg-[#ffb442]/10 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                     >
                       <Pencil size={15} />
                     </button>
@@ -209,8 +279,9 @@ export function AdminDashboard({ onSignOut }: AdminDashboardProps) {
                     <button
                       type="button"
                       onClick={() => handleToggleActive(product)}
-                      title={product.is_active ? 'إخفاء' : 'إظهار'}
-                      className="flex h-8 items-center justify-center rounded-lg text-stone-600 hover:bg-stone-100 dark:text-white/70 dark:hover:bg-white/10 transition-colors"
+                      title={product.is_active ? t('statusHidden') : t('statusActive')}
+                      disabled={busyId === product.id}
+                      className="flex h-8 items-center justify-center rounded-lg text-stone-600 hover:bg-stone-100 dark:text-white/70 dark:hover:bg-white/10 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                     >
                       {product.is_active ? <Eye size={15} /> : <EyeOff size={15} className="text-stone-400 dark:text-zinc-500" />}
                     </button>
@@ -218,7 +289,7 @@ export function AdminDashboard({ onSignOut }: AdminDashboardProps) {
                     <button
                       type="button"
                       onClick={() => handleShare(product)}
-                      title="مشاركة الرابط"
+                      title={t('shareProduct')}
                       className="flex h-8 items-center justify-center rounded-lg text-sky-600 dark:text-sky-400 hover:bg-sky-500/10 transition-colors"
                     >
                       <Share2 size={15} />

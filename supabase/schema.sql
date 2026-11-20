@@ -5,8 +5,8 @@ create table if not exists public.products (
   name text not null,
   volume text not null default '100 ml',
   category text not null default 'شرقي',
-  price numeric not null,
-  old_price numeric,
+  price numeric not null check (price > 0),
+  old_price numeric check (old_price is null or old_price > 0),
   description text,
   image text not null,
   is_featured boolean not null default false,
@@ -40,7 +40,7 @@ on conflict (id) do nothing;
 create policy "Allow public read product images"
   on storage.objects
   for select
-  to anon
+  to public
   using (bucket_id = 'product-images');
 
 create policy "Allow authenticated upload product images"

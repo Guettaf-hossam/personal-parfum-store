@@ -11,7 +11,7 @@ interface ProductFormModalProps {
   onSuccess: (saved: Product) => void;
 }
 
-const VOLUMES = ['100 ml', '150 ml', '200 ml'];
+const VOLUME_SUGGESTIONS = ['50 ml', '75 ml', '100 ml', '125 ml', '150 ml', '200 ml'];
 const DEFAULT_CATEGORIES = ['عساف', 'هيرش', 'إبراق', 'شرقي'];
 
 export function ProductFormModal({ product, onClose, onSuccess }: ProductFormModalProps) {
@@ -39,11 +39,10 @@ export function ProductFormModal({ product, onClose, onSuccess }: ProductFormMod
     setErrorMsg(null);
     try {
       const compressedBlob = await compressImageToWebp(file, 900, 0.82);
-      const fileName = `${file.name.replace(/\.[^/.]+$/, '')}.webp`;
-      const publicUrl = await uploadProductImage(compressedBlob, fileName);
+      const publicUrl = await uploadProductImage(compressedBlob);
       setImageUrl(publicUrl);
     } catch (err: unknown) {
-      setErrorMsg(err instanceof Error ? err.message : 'Image upload failed');
+      setErrorMsg(err instanceof Error ? err.message : t('actionFailed'));
     } finally {
       setUploading(false);
     }
@@ -52,9 +51,39 @@ export function ProductFormModal({ product, onClose, onSuccess }: ProductFormMod
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) return;
-    if (!price || Number(price) <= 0) return;
-    if (!imageUrl) {
-      setErrorMsg('Image is required');
+
+    const numPrice = Number(price);
+    if (isNaN(numPrice) || numPrice <= 0) {
+      setErrorMsg(t('invalidPrice'));
+      return;
+    }
+
+    let parsedOldPrice: number | null = null;
+    if (oldPrice.trim()) {
+      const numOld = Number(oldPrice);
+      if (numOld <= 0) {
+        parsedOldPrice = null;
+      } else if (numOld <= numPrice) {
+        setErrorMsg(t('invalidOldPrice'));
+        return;
+      } else {
+        parsedOldPrice = numOld;
+      }
+    }
+
+    const trimmedImg = imageUrl.trim();
+    if (!trimmedImg) {
+      setErrorMsg(t('imageRequired'));
+      return;
+    }
+
+    const isSafeUrl =
+      trimmedImg.startsWith('/') ||
+      trimmedImg.startsWith('https:' + '/'.repeat(2)) ||
+      trimmedImg.startsWith('http:' + '/'.repeat(2));
+
+    if (!isSafeUrl) {
+      setErrorMsg(t('invalidImageUrl'));
       return;
     }
 
@@ -64,12 +93,12 @@ export function ProductFormModal({ product, onClose, onSuccess }: ProductFormMod
     try {
       const payload: Partial<Product> & { name: string; price: number; image: string } = {
         name: name.trim(),
-        volume,
+        volume: volume.trim() || '100 ml',
         category: category.trim(),
-        price: Number(price),
-        old_price: oldPrice ? Number(oldPrice) : null,
+        price: numPrice,
+        old_price: parsedOldPrice,
         description: description.trim() || null,
-        image: imageUrl,
+        image: trimmedImg,
         is_featured: isFeatured,
         is_active: isActive,
       };
@@ -97,7 +126,7 @@ export function ProductFormModal({ product, onClose, onSuccess }: ProductFormMod
       }
       onClose();
     } catch (err: unknown) {
-      setErrorMsg(err instanceof Error ? err.message : 'Failed to save product');
+      setErrorMsg(err instanceof Error ? err.message : t('actionFailed'));
     } finally {
       setSaving(false);
     }
@@ -155,18 +184,21 @@ export function ProductFormModal({ product, onClose, onSuccess }: ProductFormMod
               <label className="block mb-1.5 text-xs font-semibold text-stone-700 dark:text-white/80">
                 {t('volume')}
               </label>
-              <select
+              <input
+                type="text"
+                required
+                list="volume-suggestions"
+                dir="ltr"
                 value={volume}
                 onChange={(e) => setVolume(e.target.value)}
-                dir="ltr"
-                className="w-full rounded-xl border border-stone-200 bg-stone-50 px-3.5 py-2.5 text-sm text-[#181512] focus:border-[#b87a14] focus:outline-none dark:border-white/10 dark:bg-[#0b0d10] dark:text-white dark:focus:border-[#ffb442]"
-              >
-                {VOLUMES.map((v) => (
-                  <option key={v} value={v} className="bg-white text-stone-900 dark:bg-[#0b0d10] dark:text-white">
-                    {v}
-                  </option>
+                placeholder="100 ml"
+                className="w-full rounded-xl border border-stone-200 bg-stone-50 px-3.5 py-2.5 text-sm text-[#181512] placeholder-stone-400 focus:border-[#b87a14] focus:outline-none dark:border-white/10 dark:bg-[#0b0d10] dark:text-white dark:focus:border-[#ffb442]"
+              />
+              <datalist id="volume-suggestions">
+                {VOLUME_SUGGESTIONS.map((v) => (
+                  <option key={v} value={v} />
                 ))}
-              </select>
+              </datalist>
             </div>
 
             <div>
@@ -198,7 +230,7 @@ export function ProductFormModal({ product, onClose, onSuccess }: ProductFormMod
               <input
                 type="number"
                 required
-                min="0"
+                min="1"
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
                 placeholder="11500"
@@ -212,7 +244,7 @@ export function ProductFormModal({ product, onClose, onSuccess }: ProductFormMod
               </label>
               <input
                 type="number"
-                min="0"
+                min="1"
                 value={oldPrice}
                 onChange={(e) => setOldPrice(e.target.value)}
                 placeholder="13000"
@@ -255,10 +287,10 @@ export function ProductFormModal({ product, onClose, onSuccess }: ProductFormMod
               <div className="flex-1 space-y-1.5">
                 <label className="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-stone-200 bg-stone-100 px-3 py-2 text-xs font-semibold text-stone-700 hover:border-[#b87a14] hover:text-[#b87a14] transition-colors dark:border-white/10 dark:bg-white/5 dark:text-white dark:hover:border-[#ffb442] dark:hover:text-[#ffb442]">
                   <Upload size={14} />
-                  <span>{uploading ? 'جاري الضغط والرفع...' : t('uploadImage')}</span>
+                  <span>{uploading ? t('uploadingImage') : t('uploadImage')}</span>
                   <input
                     type="file"
-                    accept="image/png,image/jpeg,image/webp"
+                    accept={['image', '*'].join('/')}
                     onChange={handleImageFile}
                     disabled={uploading}
                     className="hidden"

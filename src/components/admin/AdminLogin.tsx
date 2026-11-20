@@ -1,7 +1,7 @@
-import { Lock, Mail, ShieldAlert } from 'lucide-react';
+import { Eye, EyeOff, Lock, Mail, ShieldAlert } from 'lucide-react';
 import { useState } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
-import { supabase } from '../../lib/supabase';
+import { isSupabaseConfigured, supabase } from '../../lib/supabase';
 import { BrandLogo } from '../BrandLogo';
 
 interface AdminLoginProps {
@@ -12,13 +12,20 @@ export function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
   const { t } = useLanguage();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
     setErrorMsg(null);
+
+    if (!isSupabaseConfigured) {
+      setErrorMsg(t('supabaseNotConfigured'));
+      return;
+    }
+
+    setLoading(true);
 
     try {
       const { error } = await supabase.auth.signInWithPassword({
@@ -27,12 +34,18 @@ export function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
       });
 
       if (error) {
-        setErrorMsg(error.message);
+        const msg = error.message.toLowerCase();
+        if (msg.includes('fetch') || msg.includes('network') || msg.includes('failed to fetch')) {
+          setErrorMsg(t('networkError'));
+        } else {
+          setErrorMsg(t('authError'));
+        }
       } else {
         onLoginSuccess();
       }
     } catch (err: unknown) {
-      setErrorMsg(err instanceof Error ? err.message : 'Login failed');
+      const isNetwork = err instanceof Error && err.message.toLowerCase().includes('network');
+      setErrorMsg(isNetwork ? t('networkError') : t('authError'));
     } finally {
       setLoading(false);
     }
@@ -64,6 +77,8 @@ export function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
               <input
                 type="email"
                 required
+                dir="ltr"
+                autoComplete="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="admin@parfum.dz"
@@ -79,14 +94,24 @@ export function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
             </label>
             <div className="relative">
               <input
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 required
+                dir="ltr"
+                autoComplete="current-password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full rounded-xl border border-stone-200 bg-stone-50 px-3.5 py-2.5 ps-10 text-sm text-[#181512] placeholder-stone-400 focus:border-[#b87a14] focus:outline-none dark:border-white/10 dark:bg-[#0b0d10] dark:text-white dark:placeholder-white/30 dark:focus:border-[#ffb442]"
+                className="w-full rounded-xl border border-stone-200 bg-stone-50 px-3.5 py-2.5 ps-10 pe-10 text-sm text-[#181512] placeholder-stone-400 focus:border-[#b87a14] focus:outline-none dark:border-white/10 dark:bg-[#0b0d10] dark:text-white dark:placeholder-white/30 dark:focus:border-[#ffb442]"
               />
               <Lock size={16} className="absolute start-3 top-1/2 -translate-y-1/2 text-stone-400 dark:text-white/40" />
+              <button
+                type="button"
+                onClick={() => setShowPassword((prev) => !prev)}
+                className="absolute end-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-700 dark:text-white/40 dark:hover:text-white transition-colors"
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+              >
+                {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+              </button>
             </div>
           </div>
 

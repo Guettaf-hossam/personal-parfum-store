@@ -24,10 +24,10 @@ export async function getActiveProducts(): Promise<Product[]> {
       .order('is_featured', { ascending: false })
       .order('created_at', { ascending: false });
 
-    if (error || !data || data.length === 0) {
+    if (error) {
       return SEED_PRODUCTS;
     }
-    return data as Product[];
+    return (data ?? []) as Product[];
   } catch {
     return SEED_PRODUCTS;
   }
@@ -37,43 +37,46 @@ export async function getAllProductsAdmin(): Promise<Product[]> {
   if (!isSupabaseConfigured) {
     return SEED_PRODUCTS;
   }
-  try {
-    const { data, error } = await supabase
-      .from('products')
-      .select('*')
-      .order('created_at', { ascending: false });
+  const { data, error } = await supabase
+    .from('products')
+    .select('*')
+    .order('created_at', { ascending: false });
 
-    if (error || !data || data.length === 0) {
-      return SEED_PRODUCTS;
-    }
-    return data as Product[];
-  } catch {
-    return SEED_PRODUCTS;
+  if (error) {
+    throw error;
   }
+  return (data ?? []) as Product[];
 }
 
-export async function upsertProduct(product: Partial<Product> & { name: string; price: number; image: string }): Promise<Product | null> {
+export async function upsertProduct(
+  product: Partial<Product> & { name: string; price: number; image: string }
+): Promise<Product | null> {
   if (!isSupabaseConfigured) {
     return null;
   }
-  const payload = {
-    ...product,
-    updated_at: new Date().toISOString(),
-  };
+  const { id, created_at: _createdAt, ...mutableFields } = product;
 
-  if (product.id) {
+  if (id) {
+    const updatePayload = {
+      ...mutableFields,
+      updated_at: new Date().toISOString(),
+    };
     const { data, error } = await supabase
       .from('products')
-      .update(payload)
-      .eq('id', product.id)
+      .update(updatePayload)
+      .eq('id', id)
       .select()
       .single();
     if (error) throw error;
     return data as Product;
   } else {
+    const insertPayload = {
+      ...mutableFields,
+      updated_at: new Date().toISOString(),
+    };
     const { data, error } = await supabase
       .from('products')
-      .insert(payload)
+      .insert(insertPayload)
       .select()
       .single();
     if (error) throw error;
@@ -98,14 +101,14 @@ export async function toggleProductActive(id: string, currentStatus: boolean): P
   return !currentStatus;
 }
 
-export async function uploadProductImage(file: Blob, fileName: string): Promise<string> {
+export async function uploadProductImage(file: Blob, _fileName?: string): Promise<string> {
   if (!isSupabaseConfigured) {
     return URL.createObjectURL(file);
   }
-  const path = `${Date.now()}-${fileName}`;
+  const path = `${Date.now()}-${crypto.randomUUID()}.webp`;
   const { error } = await supabase.storage.from('product-images').upload(path, file, {
     contentType: 'image/webp',
-    upsert: true,
+    upsert: false,
   });
   if (error) throw error;
 
